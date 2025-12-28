@@ -1,11 +1,14 @@
 import Hero from "@/components/Hero";
-import Skills from "@/components/Skills"; // <--- Import Skills
+import Skills from "@/components/Skills";
+import BentoGrid from "@/components/BentoGrid"; // <--- Import BentoGrid
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20">
       <Hero />
-      <Skills /> {/* <--- Pasang di sini */}
+      <Skills />
+      {/* Ganti Projects biasa dengan BentoGrid yang keren */}
+      <BentoGrid /> 
     </div>
   );
 }
