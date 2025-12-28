@@ -30,7 +30,7 @@ const BentoGrid = () => {
       {/* GRID UTAMA (4 Kolom) */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[180px]">
         
-        {/* 1. PROJECTS SHOWCASE */}
+        {/* 1. PROJECTS SHOWCASE (UPDATED DESIGN) */}
         <SpotlightCard className="md:col-span-2 md:row-span-2 bg-zinc-900/50 group overflow-hidden">
           <div className="relative z-20 h-full flex flex-col justify-between p-6">
             <div>
@@ -41,17 +41,23 @@ const BentoGrid = () => {
               <p className="text-zinc-400 mt-2 max-w-[250px]">Kumpulan aplikasi nyata yang saya buat untuk memecahkan masalah.</p>
             </div>
 
-            {/* STATIC MOCKUP */}
-            <div className="absolute right-[-20px] bottom-[-20px] flex flex-col gap-3 rotate-[-12deg] group-hover:rotate-[-5deg] group-hover:scale-105 transition-all duration-500 ease-out opacity-50 group-hover:opacity-100 grayscale group-hover:grayscale-0">
-               <div className="w-64 h-32 bg-zinc-800 border border-zinc-700 rounded-lg shadow-2xl translate-x-12"></div>
-               <div className="w-64 h-32 bg-zinc-950 border border-emerald-500/30 rounded-lg shadow-2xl translate-x-6 z-10 flex items-center justify-center">
-                  <span className="text-emerald-500/20 font-bold text-4xl">CODE</span>
-               </div>
+            {/* 👇 UPDATED MOCKUP (3 LAYER, NO TEXT) 👇 */}
+            <div className="absolute right-[-20px] bottom-[20px] flex flex-col gap-4 rotate-[-12deg] group-hover:rotate-[-5deg] group-hover:scale-105 transition-all duration-500 ease-out opacity-80 group-hover:opacity-100">
+               
+               {/* Kotak 1 (Paling Atas/Belakang - BARU) */}
+               <div className="w-52 h-24 bg-zinc-800 border border-zinc-700/50 rounded-lg shadow-2xl translate-x-12 opacity-60"></div>
+               
+               {/* Kotak 2 (Tengah) */}
+               <div className="w-52 h-24 bg-zinc-900 border border-zinc-700/50 rounded-lg shadow-2xl translate-x-6 opacity-80"></div>
+               
+               {/* Kotak 3 (Paling Bawah/Depan - Tanpa Teks) */}
+               <div className="w-52 h-24 bg-zinc-950 border border-emerald-500/20 rounded-lg shadow-2xl z-10"></div>
+            
             </div>
           </div>
         </SpotlightCard>
 
-        {/* 2. ABOUT ME (STACK DENGAN LOGIKA REACT BITS) */}
+        {/* 2. ABOUT ME (STACK - TETAP SAMA) */}
         <SpotlightCard className="md:col-span-1 md:row-span-2 bg-zinc-900/50 p-6 flex flex-col items-center justify-between overflow-hidden">
            <div className="text-center relative z-20 mb-2">
              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-3 mx-auto border border-zinc-700 text-blue-400 text-xl">
@@ -61,7 +67,6 @@ const BentoGrid = () => {
              <p className="text-xs text-zinc-500 mt-1">Who I am.</p>
            </div>
            
-           {/* STACK CONTAINER (Ukuran 200x250) */}
            <div className="relative z-20 w-full flex-1 flex items-center justify-center mt-10">
               <div style={{ width: 150, height: 180, position: 'relative' }}>
                 <Stack
@@ -208,7 +213,6 @@ const Stack = ({
   useEffect(() => {
     setIsMounted(true);
     if (cards.length) {
-      // Setup stack dengan ID unik
       setStack(cards.map((content, index) => ({ id: index, content })));
     }
   }, [cards]);
@@ -216,13 +220,9 @@ const Stack = ({
   const sendToBack = (id: number) => {
     setStack((prev) => {
       const newStack = [...prev];
-      // Cari kartu yang aktif (paling atas adalah elemen terakhir di array)
       const index = newStack.findIndex((card) => card.id === id);
       if (index < 0) return prev;
-      
-      // Ambil kartu tersebut
       const [card] = newStack.splice(index, 1);
-      // Masukkan ke AWAL array (Index 0 = Paling Bawah/Belakang)
       newStack.unshift(card); 
       return newStack;
     });
@@ -233,15 +233,8 @@ const Stack = ({
   return (
     <div className="relative w-full h-full" style={{ perspective: 600 }}>
       {stack.map((card, index) => {
-        // LOGIC KUNCI: Kartu Paling Atas adalah INDEX TERAKHIR
-        const indexInStack = index; 
         const isTop = index === stack.length - 1; 
-
-        // Hitung posisi relatif dari atas (0 = Top, 1 = Behind 1, dst)
-        // Semakin kecil index array, semakin jauh di belakang.
         const reverseIndex = stack.length - 1 - index;
-
-        // Rotasi Random
         const randomRotate = randomRotation ? (index % 2 === 0 ? 7 : 14) : 0;
 
         return (
@@ -249,19 +242,16 @@ const Stack = ({
             key={card.id}
             className="absolute inset-0 w-full h-full rounded-2xl"
             style={{ 
-                zIndex: index, // Index array kecil (belakang) punya z-index kecil
-                transformOrigin: '50% 100%' // Titik putar di bawah tengah
+                zIndex: index, 
+                transformOrigin: '50% 100%'
             }} 
             animate={{
-                // Scale Logic: Kartu Top (reverseIndex 0) = 1. Belakangnya 0.95, dst.
                 scale: 1 - reverseIndex * 0.05,
-                // Y Logic: Kartu belakang naik sedikit (-10px) agar terlihat numpuk
                 y: reverseIndex * -10,
-                rotateZ: isTop ? 0 : randomRotate, // Kartu Top lurus, belakang miring
+                rotateZ: isTop ? 0 : randomRotate,
             }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
           >
-             {/* Jika ini kartu paling atas, bungkus dengan Drag Logic */}
              {isTop ? (
                  <CardRotate onSendToBack={() => sendToBack(card.id)} sensitivity={sensitivity}>
                     <div 
@@ -272,11 +262,8 @@ const Stack = ({
                     </div>
                  </CardRotate>
              ) : (
-                // Jika kartu belakang, render biasa (tanpa drag)
                  <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 relative">
                     {card.content}
-                    {/* Overlay Hitam untuk kartu belakang */}
-                    {/* <div className="absolute inset-0 bg-black/40 z-10 pointer-events-none" /> */}
                  </div>
              )}
           </motion.div>
