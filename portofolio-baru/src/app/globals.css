@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --background: #0f172a;
-  --foreground: #ffffff;
+  /* Ubah background menjadi hampir hitam pekat (#0a0a0a) */
+  --background: #0a0a0a; 
+  --foreground: #ededed;
 }
 
 body {
