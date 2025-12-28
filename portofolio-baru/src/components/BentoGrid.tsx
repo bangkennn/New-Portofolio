@@ -164,11 +164,11 @@ const BentoGrid = () => {
                     </div>
                 </div>
                 <h3 className="text-lg font-bold text-white">Skills & Tools</h3>
-                <p className="text-xs text-zinc-500 mt-1 mb-3">Covering mobile, web, AI, and UI/UX technologies.</p>
+                <p className="text-xs text-zinc-500 mt-1 mb-9">Covering mobile, web, AI, and UI/UX technologies.</p>
             </div>
             
             {/* Marquee area - no padding, touches edges */}
-            <div className="relative z-20 flex flex-col gap-6 w-full mt-auto marquee-container">
+            <div className="relative z-20 flex flex-col gap-7 w-full mt-auto marquee-container">
                 {/* Top row - moves left */}
                 <div className="overflow-hidden w-full" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     <Marquee gradient={false} speed={40} direction="left" pauseOnHover={true}>
@@ -203,37 +203,15 @@ const BentoGrid = () => {
             {/* Visual: Medals/Trophies illustration */}
             <div className="relative z-20 mt-6 flex items-center justify-center">
                 <div className="relative flex items-center gap-4">
-                    {/* Gold Medal - Left */}
-                    <motion.div
-                        className="relative"
-                        initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{ delay: 0.2, duration: 0.6, type: "spring", stiffness: 200 }}
-                        whileHover={{ scale: 1.15, rotate: 5, y: -5 }}
-                    >
-                        <div className="relative w-16 h-16 flex items-center justify-center">
-                            {/* Medal circle */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 rounded-full shadow-lg shadow-yellow-500/30 border-2 border-yellow-300/50"></div>
-                            {/* Inner circle */}
-                            <div className="absolute inset-2 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full"></div>
-                            {/* Star icon */}
-                            <FaMedal className="text-yellow-700 text-2xl relative z-10" />
-                            {/* Shine effect */}
-                            <div className="absolute top-1 left-1 w-3 h-3 bg-white/40 rounded-full blur-sm"></div>
-                        </div>
-                        {/* Ribbon */}
-                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-b-lg"></div>
-                    </motion.div>
-
                     {/* Silver Medal - Center */}
                     <motion.div
                         className="relative"
                         initial={{ opacity: 0, scale: 0, rotate: -180 }}
                         animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{ delay: 0.4, duration: 0.6, type: "spring", stiffness: 200 }}
+                        transition={{ delay: 0, duration: 0.6, type: "spring", stiffness: 200 }}
                         whileHover={{ scale: 1.15, rotate: -5, y: -5 }}
                     >
-                        <div className="relative w-20 h-20 flex items-center justify-center">
+                        <div className="relative w-16 h-16 flex items-center justify-center">
                             {/* Medal circle - larger */}
                             <div className="absolute inset-0 bg-gradient-to-br from-zinc-300 via-zinc-400 to-zinc-500 rounded-full shadow-lg shadow-zinc-400/30 border-2 border-zinc-200/50"></div>
                             {/* Inner circle */}
@@ -247,12 +225,36 @@ const BentoGrid = () => {
                         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-3 bg-gradient-to-b from-zinc-400 to-zinc-500 rounded-b-lg"></div>
                     </motion.div>
 
+
+                    {/* Gold Medal - Left */}
+                    <motion.div
+                        className="relative"
+                        initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        transition={{ delay: 0, duration: 0.6, type: "spring", stiffness: 200 }}
+                        whileHover={{ scale: 1.15, rotate: 5, y: -5 }}
+                    >
+                        <div className="relative w-20 h-20 flex items-center justify-center">
+                            {/* Medal circle */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 rounded-full shadow-lg shadow-yellow-500/30 border-2 border-yellow-300/50"></div>
+                            {/* Inner circle */}
+                            <div className="absolute inset-2 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full"></div>
+                            {/* Star icon */}
+                            <FaMedal className="text-yellow-700 text-2xl relative z-10" />
+                            {/* Shine effect */}
+                            <div className="absolute top-1 left-1 w-3 h-3 bg-white/40 rounded-full blur-sm"></div>
+                        </div>
+                        {/* Ribbon */}
+                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-b-lg"></div>
+                    </motion.div>
+
+
                     {/* Bronze Medal - Right */}
                     <motion.div
                         className="relative"
                         initial={{ opacity: 0, scale: 0, rotate: -180 }}
                         animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{ delay: 0.6, duration: 0.6, type: "spring", stiffness: 200 }}
+                        transition={{ delay: 0, duration: 0.6, type: "spring", stiffness: 200 }}
                         whileHover={{ scale: 1.15, rotate: 5, y: -5 }}
                     >
                         <div className="relative w-16 h-16 flex items-center justify-center">
