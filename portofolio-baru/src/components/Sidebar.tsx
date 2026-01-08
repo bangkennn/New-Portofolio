@@ -34,8 +34,22 @@ const Sidebar = () => {
       <div className="mt-auto">
         <p className="text-xs text-zinc-600 mb-3 text-center uppercase tracking-widest font-semibold">Socials</p>
         <div className="flex gap-5 text-xl text-zinc-500 justify-center">
-          <a href="#" className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"><FaGithub /></a>
-          <a href="#" className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"><FaLinkedin /></a>
+          <a 
+            href="https://github.com/bangkennn" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"
+          >
+            <FaGithub />
+          </a>
+          <a 
+            href="https://www.linkedin.com/in/davian-putra-swardana/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"
+          >
+            <FaLinkedin />
+          </a>
         </div>
       </div>
     </aside>
