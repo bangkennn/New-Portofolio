@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaHome, FaUser, FaBriefcase, FaEnvelope, FaGithub, FaLinkedin, FaTrophy } from 'react-icons/fa';
+import { FaHome, FaUser, FaBriefcase, FaEnvelope, FaGithub, FaLinkedin, FaTrophy, FaLock } from 'react-icons/fa';
 
 const Sidebar = () => {
   return (
@@ -21,7 +21,7 @@ const Sidebar = () => {
 
       {/* Menu Navigasi */}
       <nav className="flex-1 w-full">
-        <ul className="space-y-2">
+        <ul className="space-y-1.5">
           <NavItem href="/" icon={<FaHome />} label="Home" />
           <NavItem href="/about" icon={<FaUser />} label="About" />
           <NavItem href="/projects" icon={<FaBriefcase />} label="Projects" />
@@ -31,25 +31,36 @@ const Sidebar = () => {
       </nav>
 
       {/* Sosial Media */}
-      <div className="mt-auto">
-        <p className="text-xs text-zinc-600 mb-3 text-center uppercase tracking-widest font-semibold">Socials</p>
-        <div className="flex gap-5 text-xl text-zinc-500 justify-center">
-          <a 
-            href="https://github.com/bangkennn" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"
-          >
-            <FaGithub />
-          </a>
-          <a 
-            href="https://www.linkedin.com/in/davian-putra-swardana/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"
-          >
-            <FaLinkedin />
-          </a>
+      <div className="mt-auto space-y-4">
+        {/* Admin Login Button */}
+        <Link 
+          href="/admin/login"
+          className="flex items-center gap-3 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 group"
+        >
+          <FaLock className="text-sm group-hover:scale-110 transition-transform" />
+          <span className="font-medium text-sm">Admin Login</span>
+        </Link>
+
+        <div>
+          <p className="text-xs text-zinc-600 mb-3 text-center uppercase tracking-widest font-semibold">Socials</p>
+          <div className="flex gap-5 text-xl text-zinc-500 justify-center">
+            <a 
+              href="https://github.com/bangkennn" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"
+            >
+              <FaGithub />
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/davian-putra-swardana/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-emerald-400 hover:-translate-y-1 transition-all duration-300"
+            >
+              <FaLinkedin />
+            </a>
+          </div>
         </div>
       </div>
     </aside>
@@ -60,8 +71,8 @@ const Sidebar = () => {
 const NavItem = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => {
   return (
     <li>
-      <Link href={href} className="flex items-center gap-4 px-4 py-3 rounded-xl text-zinc-400 hover:bg-zinc-900 hover:text-emerald-400 transition-all duration-300 group">
-        <span className="text-lg group-hover:scale-110 transition-transform">{icon}</span>
+      <Link href={href} className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-zinc-400 hover:bg-zinc-900 hover:text-emerald-400 transition-all duration-300 group">
+        <span className="text-base group-hover:scale-110 transition-transform">{icon}</span>
         <span className="font-medium text-sm tracking-wide">{label}</span>
       </Link>
     </li>
