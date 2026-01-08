@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaHome, FaUser, FaBriefcase, FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaHome, FaUser, FaBriefcase, FaEnvelope, FaGithub, FaLinkedin, FaTrophy } from 'react-icons/fa';
 
 const Sidebar = () => {
   return (
@@ -25,6 +25,7 @@ const Sidebar = () => {
           <NavItem href="/" icon={<FaHome />} label="Home" />
           <NavItem href="/about" icon={<FaUser />} label="About" />
           <NavItem href="/projects" icon={<FaBriefcase />} label="Projects" />
+          <NavItem href="/achievement" icon={<FaTrophy />} label="Achievement" />
           <NavItem href="/contact" icon={<FaEnvelope />} label="Contact" />
         </ul>
       </nav>
