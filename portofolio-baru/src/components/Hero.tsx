@@ -17,13 +17,13 @@ const Hero = () => {
 
       {/* 2. Judul Utama */}
       <h1 className="text-5xl md:text-5xl font-extrabold text-white tracking-tight leading-[1.1] mb-8">
-        Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Satria Bahari</span> <br />
+        Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Davian Putra Swardana</span> <br />
         <span className="text-zinc-500">Fullstack Developer.</span>
       </h1>
 
       {/* 3. Deskripsi */}
       <p className="text-l text-zinc-400 leading-relaxed max-w-2xl mb-12">
-        Passionate and seasoned Software Engineer with a strong focus on frontend development. Proficient in TypeScript and well-versed in all aspects of web technologies.
+        Passionate and seasoned Software Engineer with a strong focus on frontend development. Proficient in TypeScript and well-versed in all aspects of web technologies. Proficient in UI UX design with responsive design creation and good experience
       </p>
 
       {/* 4. Tombol */}

@@ -12,7 +12,7 @@ const Sidebar = () => {
         <div className="w-28 h-28 rounded-full bg-zinc-900 mb-5 border-2 border-emerald-500 overflow-hidden relative flex items-center justify-center shadow-lg shadow-emerald-500/10">
              <span className="text-2xl font-bold text-zinc-600">IMG</span>
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-white">Satria Bahari</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-white">Davian Putra</h2>
         <div className="flex items-center gap-2 mt-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <p className="text-sm text-zinc-400">Web Developer</p>
