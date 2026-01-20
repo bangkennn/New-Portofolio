@@ -49,29 +49,29 @@ export default function About() {
       {/* Bagian Tentang */}
       <section className="mb-20">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <FaUser className="text-emerald-500" /> Tentang
-          </h1>
+          </h2>
           <p className="text-zinc-500 text-lg">Perkenalan singkat tentang siapa saya.</p>
         </div>
 
         <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 md:p-10">
-          <p className="text-zinc-300 leading-relaxed text-lg mb-4">
+          <p className="text-zinc-300 leading-relaxed text-l mb-4">
             Salam hangat,
           </p>
-          <p className="text-zinc-300 leading-relaxed text-lg mb-4">
+          <p className="text-zinc-300 leading-relaxed text-l mb-4">
             Saya <span className="text-emerald-400 font-semibold">Davian Putra Swardana</span>, seorang mahasiswa Sistem Informasi di Universitas Jambi dan seorang Fullstack Developer yang memiliki passion dalam membangun produk software yang impactful.
           </p>
-          <p className="text-zinc-300 leading-relaxed text-lg mb-4">
+          <p className="text-zinc-300 leading-relaxed text-l mb-4">
             Dalam pengembangan web, saya menggunakan teknologi modern seperti Next.js, TypeScript, dan Tailwind CSS untuk frontend, serta Golang untuk backend development. Untuk aplikasi mobile, saya mengembangkan aplikasi Android native menggunakan Kotlin.
           </p>
-          <p className="text-zinc-300 leading-relaxed text-lg mb-4">
+          <p className="text-zinc-300 leading-relaxed text-l mb-4">
             Saya percaya bahwa pengembangan software yang baik adalah tentang menciptakan solusi yang user-friendly dengan performa tinggi. Saya selalu fokus pada efisiensi dan kejelasan, baik dalam interface yang intuitif maupun dalam backend services yang robust.
           </p>
-          <p className="text-zinc-300 leading-relaxed text-lg mb-4">
+          <p className="text-zinc-300 leading-relaxed text-l mb-4">
             Sebagai seorang fast learner, saya senang bekerja dalam lingkungan yang dinamis dan menantang. Saya percaya bahwa komunikasi yang baik dan sinergi tim adalah kunci kesuksesan dalam pengembangan software.
           </p>
-          <p className="text-zinc-300 leading-relaxed text-lg">
+          <p className="text-zinc-300 leading-relaxed text-l">
             Pengalaman saya telah membentuk kemampuan teknis, analitis, dan leadership saya. Saya selalu bersemangat untuk bekerja dalam tim, belajar dari orang lain, dan berkontribusi pada proyek-proyek yang impactful.
           </p>
         </div>
@@ -83,7 +83,7 @@ export default function About() {
           <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <FaBriefcase className="text-emerald-500" /> Karier
           </h2>
-          <p className="text-zinc-500 text-lg">Perjalanan profesional saya.</p>
+          <p className="text-zinc-500 text-l">Perjalanan profesional saya.</p>
         </div>
 
         <div className="space-y-6">
@@ -156,7 +156,7 @@ export default function About() {
           <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <FaGraduationCap className="text-emerald-500" /> Pendidikan
           </h2>
-          <p className="text-zinc-500 text-lg">Perjalanan pendidikan saya.</p>
+          <p className="text-zinc-500 text-l">Perjalanan pendidikan saya.</p>
         </div>
 
         <div className="space-y-6">

@@ -32,7 +32,7 @@ const Skills = () => {
         <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-2">
            <span className="text-emerald-500">My</span> Skills
         </h2>
-        <p className="text-zinc-500 text-sm">Teknologi yang saya gunakan.</p>
+        <p className="text-zinc-500 text-l">Teknologi yang saya gunakan.</p>
       </div>
 
       {/* Container Slider (Biarkan full width supaya keren) */}

@@ -67,10 +67,10 @@ export default function Projects() {
       
       {/* Header Section */}
       <div className="mb-12">
-        <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+        <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
           <FaBriefcase className="text-emerald-500" /> Projects
-        </h1>
-        <p className="text-zinc-500 text-lg">
+        </h2>
+        <p className="text-zinc-500 text-l">
           Pameran proyek pribadi dan open-source yang telah saya buat atau kontribusikan.
         </p>
       </div>

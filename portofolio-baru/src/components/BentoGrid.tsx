@@ -91,7 +91,7 @@ const BentoGrid = () => {
         <h2 className="text-4xl font-bold text-white flex items-center gap-3">
           <FaLayerGroup className="text-emerald-500" /> Featured Sections
         </h2>
-        <p className="text-zinc-500 mt-2 text-lg">Explore everything I've crafted, contributed, and accomplished.</p>
+        <p className="text-zinc-500 mt-2 text-l">Explore everything I've crafted, contributed, and accomplished.</p>
       </div>
 
       {/* GRID UTAMA (4 Kolom) */}

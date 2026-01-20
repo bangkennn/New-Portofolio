@@ -87,10 +87,10 @@ export default function Contact() {
       
       {/* Header Section */}
       <div className="mb-12">
-        <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+        <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
           <FaEnvelope className="text-emerald-500" /> Kontak
-        </h1>
-        <p className="text-zinc-500 text-lg">Mari kita terhubung</p>
+        </h2>
+        <p className="text-zinc-500 text-l">Mari kita terhubung</p>
       </div>
 
       {/* Social Media Section */}

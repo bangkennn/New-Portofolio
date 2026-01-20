@@ -120,10 +120,10 @@ export default function Achievement() {
       
       {/* Header Section */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+        <h2 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
           <FaTrophy className="text-emerald-500" /> Pencapaian
-        </h1>
-        <p className="text-zinc-500 text-lg">
+        </h2>
+        <p className="text-zinc-500 text-l">
           Kumpulan sertifikat dan badge yang saya peroleh sepanjang perjalanan profesional dan akademik.
         </p>
       </div>
