@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FaSignOutAlt, FaHome } from "react-icons/fa";
+import { FaSignOutAlt, FaHome, FaTools } from "react-icons/fa";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -37,11 +37,37 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Dashboard Content */}
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8">
-          <p className="text-zinc-400 text-center py-20">
-            Dashboard admin akan segera tersedia. Fitur manajemen konten sedang dalam pengembangan.
-          </p>
+        {/* Under Maintenance Content */}
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="text-center max-w-2xl mx-auto px-4">
+            {/* Icon */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-24 h-24 rounded-full bg-zinc-900 border-2 border-emerald-500/20 flex items-center justify-center">
+                <FaTools className="text-4xl text-emerald-500 animate-pulse" />
+              </div>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                Under Maintenance
+              </span>
+            </h2>
+
+            {/* Description */}
+            <p className="text-xl text-zinc-400 mb-8 leading-relaxed">
+              Dashboard admin sedang dalam pengembangan. 
+              <br />
+              Fitur manajemen konten akan segera tersedia!
+            </p>
+
+            {/* Decorative Elements */}
+            <div className="flex items-center justify-center gap-2 mt-12">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse [animation-delay:0.2s]"></div>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse [animation-delay:0.4s]"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

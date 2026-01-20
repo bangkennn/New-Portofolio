@@ -60,7 +60,7 @@ const Skills = () => {
 
 const SkillItem = ({ icon, name }: { icon: React.ReactNode; name: string }) => (
   <div className="flex flex-col items-center gap-3 group cursor-pointer min-w-[80px] mx-8">
-    <div className="text-4xl md:text-5xl transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+    <div className="text-4xl md:text-5xl transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.4)] my-3">
       {icon}
     </div>
     <span className="text-xs md:text-sm font-medium text-zinc-600 group-hover:text-emerald-400 transition-colors">

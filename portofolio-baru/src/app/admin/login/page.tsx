@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaLock, FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 
 export default function AdminLogin() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -20,19 +20,22 @@ export default function AdminLogin() {
     setError("");
     setIsLoading(true);
 
-    // TODO: Implementasi autentikasi dengan backend
-    // Untuk sementara, validasi sederhana
-    if (formData.username && formData.password) {
-      // Simulasi login
-      setTimeout(() => {
+    // Validasi credentials
+    const ADMIN_EMAIL = "itsadmin@portofolio.com";
+    const ADMIN_PASSWORD = "myp0rt0f0l10";
+
+    // Simulasi loading
+    setTimeout(() => {
+      if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
+        // Login berhasil
         setIsLoading(false);
-        // Redirect ke dashboard admin setelah login berhasil
         router.push("/admin/dashboard");
-      }, 1000);
-    } else {
-      setIsLoading(false);
-      setError("Username dan password harus diisi");
-    }
+      } else {
+        // Login gagal
+        setIsLoading(false);
+        setError("Email atau password salah. Silakan coba lagi.");
+      }
+    }, 1000);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,24 +78,24 @@ export default function AdminLogin() {
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Username Input */}
+            {/* Email Input */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-zinc-400 mb-2">
-                Username
+              <label htmlFor="email" className="block text-sm font-medium text-zinc-400 mb-2">
+                Email
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <FaUser className="text-zinc-500" />
+                  <FaEnvelope className="text-zinc-500" />
                 </div>
                 <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
                   required
                   className="w-full pl-12 pr-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
-                  placeholder="Masukkan username"
+                  placeholder="Masukkan email"
                 />
               </div>
             </div>
