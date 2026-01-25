@@ -1,92 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { FaTrophy, FaSearch, FaChevronDown, FaArrowRight } from "react-icons/fa";
-
-// Data Dummy Achievements
-const achievementsData = [
-  {
-    id: 1,
-    title: "Best Team Bangkit Company Track Capstone Project",
-    issuer: "Bangkit Academy",
-    issuedDate: "January 2025",
-    category: "Competition",
-    image: "certificate-1", // placeholder
-    credentialUrl: "#",
-  },
-  {
-    id: 2,
-    title: "Certificate of Completion",
-    issuer: "Bangkit Academy",
-    issuedDate: "January 2025",
-    category: "Course",
-    image: "certificate-2",
-    credentialUrl: "#",
-  },
-  {
-    id: 3,
-    title: "Sertifikat Kepesertaan Studi Independen Bersertifikat Angkatan 7",
-    issuer: "Kampus Merdeka",
-    issuedDate: "December 2024",
-    category: "Program",
-    image: "certificate-3",
-    credentialUrl: "#",
-  },
-  {
-    id: 4,
-    title: "Full Stack Web Development Certificate",
-    issuer: "Dicoding Indonesia",
-    issuedDate: "November 2024",
-    category: "Course",
-    image: "certificate-4",
-    credentialUrl: "#",
-  },
-  {
-    id: 5,
-    title: "Cloud Computing Fundamentals",
-    issuer: "Google Cloud",
-    issuedDate: "October 2024",
-    category: "Course",
-    image: "certificate-5",
-    credentialUrl: "#",
-  },
-  {
-    id: 6,
-    title: "Hackathon Winner - Tech Innovation Challenge",
-    issuer: "Tech Community",
-    issuedDate: "September 2024",
-    category: "Competition",
-    image: "certificate-6",
-    credentialUrl: "#",
-  },
-  {
-    id: 7,
-    title: "React Developer Certification",
-    issuer: "Meta",
-    issuedDate: "August 2024",
-    category: "Course",
-    image: "certificate-7",
-    credentialUrl: "#",
-  },
-  {
-    id: 8,
-    title: "Best Project Award - Startup Weekend",
-    issuer: "Startup Community",
-    issuedDate: "July 2024",
-    category: "Competition",
-    image: "certificate-8",
-    credentialUrl: "#",
-  },
-  {
-    id: 9,
-    title: "Node.js Backend Development",
-    issuer: "Udemy",
-    issuedDate: "June 2024",
-    category: "Course",
-    image: "certificate-9",
-    credentialUrl: "#",
-  },
-];
+import { useState, useMemo, useEffect } from "react";
+import { FaTrophy, FaSearch, FaChevronDown, FaArrowRight, FaTimes } from "react-icons/fa";
+import { Achievement } from "@/lib/supabase";
 
 // Filter options
 const filterOptions = [
@@ -94,26 +10,55 @@ const filterOptions = [
   { value: "Course", label: "Course" },
   { value: "Competition", label: "Competition" },
   { value: "Program", label: "Program" },
+  { value: "Certification", label: "Certification" },
 ];
 
 export default function Achievement() {
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedCertificate, setSelectedCertificate] = useState<Achievement | null>(null);
+
+  useEffect(() => {
+    fetchAchievements();
+  }, []);
+
+  const fetchAchievements = async () => {
+    try {
+      const res = await fetch('/api/achievements');
+      const data = await res.json();
+      setAchievements(data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch achievements:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter achievements berdasarkan search dan filter
   const filteredAchievements = useMemo(() => {
-    return achievementsData.filter((achievement) => {
+    return achievements.filter((achievement) => {
       const matchesSearch =
         achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        achievement.issuer.toLowerCase().includes(searchQuery.toLowerCase());
+        achievement.issuer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        achievement.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
       
       const matchesFilter =
         selectedFilter === "all" || achievement.category === selectedFilter;
 
       return matchesSearch && matchesFilter;
     });
-  }, [searchQuery, selectedFilter]);
+  }, [achievements, searchQuery, selectedFilter]);
+
+  const handleViewCredential = (achievement: Achievement) => {
+    setSelectedCertificate(achievement);
+  };
+
+  const handleCloseCertificate = () => {
+    setSelectedCertificate(null);
+  };
 
   return (
     <div className="min-h-screen py-20 max-w-7xl mx-auto px-4">
@@ -204,26 +149,44 @@ export default function Achievement() {
           >
             {/* Certificate Image */}
             <div className="relative h-64 bg-zinc-950 overflow-hidden">
-              {/* Placeholder untuk gambar sertifikat */}
-              <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-950 flex items-center justify-center">
-                <div className="w-full h-full bg-zinc-800/30 flex items-center justify-center">
-                  <div className="text-center p-4">
-                    <div className="w-24 h-24 mx-auto mb-4 bg-zinc-700 rounded-lg flex items-center justify-center">
-                      <FaTrophy className="text-4xl text-zinc-600" />
+              {achievement.certificate_url ? (
+                achievement.certificate_type === 'pdf' ? (
+                  <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-950 flex items-center justify-center">
+                    <div className="text-center p-4">
+                      <div className="w-24 h-24 mx-auto mb-4 bg-red-500/20 rounded-lg flex items-center justify-center border border-red-500/30">
+                        <span className="text-4xl">📄</span>
+                      </div>
+                      <p className="text-zinc-400 text-xs">PDF Certificate</p>
                     </div>
-                    <p className="text-zinc-600 text-xs">Certificate Preview</p>
+                  </div>
+                ) : (
+                  <img
+                    src={achievement.certificate_url}
+                    alt={achievement.title}
+                    className="w-full h-full object-cover"
+                  />
+                )
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-950 flex items-center justify-center">
+                  <div className="w-full h-full bg-zinc-800/30 flex items-center justify-center">
+                    <div className="text-center p-4">
+                      <div className="w-24 h-24 mx-auto mb-4 bg-zinc-700 rounded-lg flex items-center justify-center">
+                        <FaTrophy className="text-4xl text-zinc-600" />
+                      </div>
+                      <p className="text-zinc-600 text-xs">Certificate Preview</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Overlay dengan tombol Lihat Kredensial */}
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <a
-                  href={achievement.credentialUrl}
+                <button
+                  onClick={() => handleViewCredential(achievement)}
                   className="px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors flex items-center gap-2"
                 >
                   Lihat Kredensial <FaArrowRight className="text-xs" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -237,19 +200,29 @@ export default function Achievement() {
                   <span className="text-zinc-500">Issuer:</span> {achievement.issuer}
                 </p>
                 <p className="text-sm text-zinc-400">
-                  <span className="text-zinc-500">Issued on:</span> {achievement.issuedDate}
+                  <span className="text-zinc-500">Issued on:</span> {achievement.issued_date}
                 </p>
               </div>
-              <span className="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-medium">
-                {achievement.category}
-              </span>
+              <div className="flex flex-wrap gap-2">
+                <span className="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-medium">
+                  {achievement.category}
+                </span>
+                {achievement.tags?.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-block px-2 py-1 bg-zinc-800/50 border border-zinc-700 text-zinc-300 rounded-full text-xs"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Empty State */}
-      {filteredAchievements.length === 0 && (
+      {filteredAchievements.length === 0 && !isLoading && (
         <div className="text-center py-20">
           <FaTrophy className="text-6xl text-zinc-800 mx-auto mb-4" />
           <p className="text-zinc-500 text-lg">No achievements found</p>
@@ -259,6 +232,83 @@ export default function Achievement() {
         </div>
       )}
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="text-center py-20">
+          <div className="text-zinc-500">Loading...</div>
+        </div>
+      )}
+
+      {/* Certificate Modal (Semi Fullscreen) */}
+      {selectedCertificate && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-8">
+          <div className="relative bg-zinc-900 border border-zinc-800 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header dengan tombol close */}
+            <div className="flex items-center justify-between p-6 border-b border-zinc-800">
+              <div>
+                <h3 className="text-xl font-bold text-white">{selectedCertificate.title}</h3>
+                <p className="text-sm text-zinc-400 mt-1">
+                  {selectedCertificate.issuer} • {selectedCertificate.issued_date}
+                </p>
+              </div>
+              <button
+                onClick={handleCloseCertificate}
+                className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+              >
+                <FaTimes className="text-xl" />
+              </button>
+            </div>
+
+            {/* Certificate Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {selectedCertificate.certificate_type === 'pdf' ? (
+                <div className="w-full h-full min-h-[500px] flex items-center justify-center bg-zinc-950 rounded-lg">
+                  <iframe
+                    src={selectedCertificate.certificate_url}
+                    className="w-full h-full min-h-[500px] rounded-lg"
+                    title={selectedCertificate.title}
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <img
+                    src={selectedCertificate.certificate_url}
+                    alt={selectedCertificate.title}
+                    className="max-w-full max-h-[70vh] object-contain rounded-lg"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Footer dengan info tambahan */}
+            <div className="p-6 border-t border-zinc-800">
+              <div className="flex flex-wrap gap-2 mb-4">
+                <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-medium">
+                  {selectedCertificate.category}
+                </span>
+                {selectedCertificate.tags?.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2 py-1 bg-zinc-800/50 border border-zinc-700 text-zinc-300 rounded-full text-xs"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              {selectedCertificate.credential_url && (
+                <a
+                  href={selectedCertificate.credential_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/20 transition-colors text-sm"
+                >
+                  Buka Kredensial <FaArrowRight className="text-xs" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

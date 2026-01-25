@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
+import { auth } from "@/lib/auth";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -14,6 +15,13 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Redirect jika sudah login
+  useEffect(() => {
+    if (auth.isAuthenticated()) {
+      router.push("/admin/dashboard");
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +35,8 @@ export default function AdminLogin() {
     // Simulasi loading
     setTimeout(() => {
       if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
-        // Login berhasil
+        // Login berhasil - set session
+        auth.setSession(formData.email);
         setIsLoading(false);
         router.push("/admin/dashboard");
       } else {

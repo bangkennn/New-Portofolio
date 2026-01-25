@@ -1,69 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { FaEnvelope, FaArrowRight, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
-import { SiGmail, SiTiktok } from "react-icons/si";
-
-// Data Social Media Cards
-const socialCards = [
-  {
-    id: 1,
-    title: "Tetap Terhubung",
-    description: "Hubungi saya via email untuk pertanyaan atau kolaborasi.",
-    buttonText: "Pergi ke Gmail",
-    url: "mailto:your.email@gmail.com",
-    icon: SiGmail,
-    gradient: "from-red-500 to-red-600",
-    bgColor: "bg-gradient-to-br from-red-500/20 to-red-600/20",
-  },
-  {
-    id: 2,
-    title: "Ikuti Perjalanan Saya",
-    description: "Ikuti perjalanan kreatif saya.",
-    buttonText: "Pergi ke Instagram",
-    url: "https://instagram.com",
-    icon: FaInstagram,
-    gradient: "from-purple-500 via-pink-500 to-orange-500",
-    bgColor: "bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-orange-500/20",
-  },
-  {
-    id: 3,
-    title: "Mari Terhubung",
-    description: "Terhubung secara profesional dengan saya.",
-    buttonText: "Pergi ke Linkedin",
-    url: "https://linkedin.com",
-    icon: FaLinkedin,
-    gradient: "from-blue-500 to-blue-600",
-    bgColor: "bg-gradient-to-br from-blue-500/20 to-blue-600/20",
-  },
-  {
-    id: 4,
-    title: "Ikut Seru-seruan",
-    description: "Tonton konten yang seru dan menarik.",
-    buttonText: "Pergi ke Tiktok",
-    url: "https://tiktok.com",
-    icon: SiTiktok,
-    gradient: "from-zinc-800 to-zinc-900",
-    bgColor: "bg-zinc-900/50",
-  },
-  {
-    id: 5,
-    title: "Jelajahi Kode",
-    description: "Lihat karya open-source saya.",
-    buttonText: "Pergi ke Github",
-    url: "https://github.com",
-    icon: FaGithub,
-    gradient: "from-zinc-800 to-zinc-900",
-    bgColor: "bg-zinc-900/50",
-  },
-];
+import { useState, useEffect } from "react";
+import { FaEnvelope, FaArrowRight } from "react-icons/fa";
+import * as FaIcons from "react-icons/fa";
+import * as SiIcons from "react-icons/si";
+import { ContactLink } from "@/lib/supabase";
 
 export default function Contact() {
+  const [contactLinks, setContactLinks] = useState<ContactLink[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+
+  useEffect(() => {
+    fetchContactLinks();
+  }, []);
+
+  const fetchContactLinks = async () => {
+    try {
+      const res = await fetch('/api/contact-links');
+      const data = await res.json();
+      setContactLinks(data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch contact links:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Helper function untuk render icon
+  const renderIcon = (iconName: string, iconType: 'fa' | 'si') => {
+    if (iconType === 'fa') {
+      const IconComponent = (FaIcons as any)[iconName];
+      return IconComponent ? <IconComponent /> : null;
+    } else {
+      const IconComponent = (SiIcons as any)[iconName];
+      return IconComponent ? <IconComponent /> : null;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,13 +76,16 @@ export default function Contact() {
           Temukan saya di media sosial
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {socialCards.map((card) => {
-            const IconComponent = card.icon;
-            return (
+        {isLoading ? (
+          <div className="text-center py-20">
+            <div className="text-zinc-500">Loading...</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {contactLinks.map((card) => (
               <div
                 key={card.id}
-                className={`relative group bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 ${card.bgColor} min-h-[200px]`}
+                className={`relative group bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 ${card.bg_color} min-h-[200px]`}
               >
                 {/* Content */}
                 <div className="relative z-10 h-full flex flex-col">
@@ -124,7 +104,7 @@ export default function Contact() {
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white text-sm font-medium transition-all duration-300 group/btn w-1/2"
                   >
-                    {card.buttonText}
+                    {card.button_text}
                     <FaArrowRight className="text-xs group-hover/btn:translate-x-1 transition-transform" />
                   </a>
                 </div>
@@ -145,16 +125,18 @@ export default function Contact() {
                     <div className="relative w-14 h-14 group-hover:w-16 group-hover:h-16 transition-all duration-300">
                       <div className={`absolute inset-0 ${card.gradient} rounded-xl p-[2px]`}>
                         <div className="w-full h-full bg-zinc-900/80 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/10">
-                          <IconComponent className="text-2xl text-white group-hover:text-3xl transition-all duration-300 drop-shadow-2xl" />
+                          <div className="text-2xl text-white group-hover:text-3xl transition-all duration-300 drop-shadow-2xl">
+                            {renderIcon(card.icon_name, card.icon_type)}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Contact Form Section */}

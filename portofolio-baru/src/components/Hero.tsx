@@ -1,7 +1,28 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaArrowRight, FaDownload } from "react-icons/fa";
 
 const Hero = () => {
+  const [description, setDescription] = useState(
+    "Passionate and seasoned Software Engineer with a strong focus on frontend development. Proficient in TypeScript and well-versed in all aspects of web technologies. Proficient in UI UX design with responsive design creation and good experience"
+  );
+
+  useEffect(() => {
+    // Fetch hero description from API
+    fetch('/api/hero')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data?.description) {
+          setDescription(data.data.description);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to fetch hero description:', error);
+      });
+  }, []);
+
   return (
     // UBAH: max-w-4xl MENJADI max-w-7xl agar lurus dengan Featured Section
     <section className="max-w-7xl mx-auto pt-20 pb-20 px-4">
@@ -23,7 +44,7 @@ const Hero = () => {
 
       {/* 3. Deskripsi */}
       <p className="text-l text-zinc-400 leading-relaxed max-w-2xl mb-12">
-        Passionate and seasoned Software Engineer with a strong focus on frontend development. Proficient in TypeScript and well-versed in all aspects of web technologies. Proficient in UI UX design with responsive design creation and good experience
+        {description}
       </p>
 
       {/* 4. Tombol */}

@@ -1,47 +1,59 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { FaUser, FaBriefcase, FaGraduationCap, FaMapMarkerAlt, FaCalendarAlt, FaLaptop, FaBuilding } from "react-icons/fa";
+import { Career, Education } from "@/lib/supabase";
 
 export default function About() {
-  // Data Dummy Karier
-  const careerData = [
-    {
-      id: 1,
-      title: "Backend Golang Developer",
-      company: "PT. Affan Technology Indonesia (Parto.id)",
-      location: "Jambi, Indonesia",
-      duration: "Jul 2025 - Sep 2025",
-      months: "2 Months",
-      type: "Internship",
-      workType: "Onsite",
-      logo: "🟢", // Placeholder untuk logo
-    },
-    {
-      id: 2,
-      title: "Frontend Web Developer",
-      company: "PT. Eltran Indonesia",
-      location: "Bandung, Indonesia",
-      duration: "May 2025 - Nov 2025",
-      months: "6 Months",
-      type: "Internship",
-      workType: "Remote",
-      logo: "🔵", // Placeholder untuk logo
-    },
-  ];
+  const [aboutDescription, setAboutDescription] = useState("");
+  const [careerData, setCareerData] = useState<Career[]>([]);
+  const [educationData, setEducationData] = useState<Education[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Data Dummy Pendidikan
-  const educationData = [
-    {
-      id: 1,
-      institution: "Universitas Jambi",
-      degree: "Bachelor's degree",
-      major: "Information Systems",
-      degreeCode: "(S.Kom)",
-      duration: "2022 - 2026",
-      location: "Jambi, Indonesia ID",
-      logo: "🎓", // Placeholder untuk logo
-    },
-  ];
+  useEffect(() => {
+    fetchAboutData();
+  }, []);
+
+  const fetchAboutData = async () => {
+    try {
+      const [aboutRes, careersRes, educationsRes] = await Promise.all([
+        fetch('/api/about'),
+        fetch('/api/careers'),
+        fetch('/api/educations'),
+      ]);
+
+      const aboutData = await aboutRes.json();
+      const careersData = await careersRes.json();
+      const educationsData = await educationsRes.json();
+
+      if (aboutData.data) {
+        setAboutDescription(aboutData.data.description || '');
+      }
+      setCareerData(careersData.data || []);
+      setEducationData(educationsData.data || []);
+    } catch (error) {
+      console.error('Failed to fetch about data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen py-20 max-w-7xl mx-auto px-4">
+        <div className="text-white text-center">Loading...</div>
+      </div>
+    );
+  }
+
+  // Format description dengan line breaks
+  const formatDescription = (text: string) => {
+    return text.split('\n').map((line, index) => (
+      <p key={index} className="text-zinc-300 leading-relaxed text-l mb-4">
+        {line}
+      </p>
+    ));
+  };
 
   return (
     <div className="min-h-screen py-20 max-w-7xl mx-auto px-4">
@@ -56,24 +68,7 @@ export default function About() {
         </div>
 
         <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 md:p-10">
-          <p className="text-zinc-300 leading-relaxed text-l mb-4">
-            Salam hangat,
-          </p>
-          <p className="text-zinc-300 leading-relaxed text-l mb-4">
-            Saya <span className="text-emerald-400 font-semibold">Davian Putra Swardana</span>, seorang mahasiswa Sistem Informasi di Universitas Jambi dan seorang Fullstack Developer yang memiliki passion dalam membangun produk software yang impactful.
-          </p>
-          <p className="text-zinc-300 leading-relaxed text-l mb-4">
-            Dalam pengembangan web, saya menggunakan teknologi modern seperti Next.js, TypeScript, dan Tailwind CSS untuk frontend, serta Golang untuk backend development. Untuk aplikasi mobile, saya mengembangkan aplikasi Android native menggunakan Kotlin.
-          </p>
-          <p className="text-zinc-300 leading-relaxed text-l mb-4">
-            Saya percaya bahwa pengembangan software yang baik adalah tentang menciptakan solusi yang user-friendly dengan performa tinggi. Saya selalu fokus pada efisiensi dan kejelasan, baik dalam interface yang intuitif maupun dalam backend services yang robust.
-          </p>
-          <p className="text-zinc-300 leading-relaxed text-l mb-4">
-            Sebagai seorang fast learner, saya senang bekerja dalam lingkungan yang dinamis dan menantang. Saya percaya bahwa komunikasi yang baik dan sinergi tim adalah kunci kesuksesan dalam pengembangan software.
-          </p>
-          <p className="text-zinc-300 leading-relaxed text-l">
-            Pengalaman saya telah membentuk kemampuan teknis, analitis, dan leadership saya. Saya selalu bersemangat untuk bekerja dalam tim, belajar dari orang lain, dan berkontribusi pada proyek-proyek yang impactful.
-          </p>
+          {formatDescription(aboutDescription)}
         </div>
       </section>
 
@@ -129,12 +124,12 @@ export default function About() {
                         {career.type}
                       </span>
                       <div className="flex items-center gap-2 text-zinc-400">
-                        {career.workType === "Remote" ? (
+                        {career.work_type === "Remote" ? (
                           <FaLaptop className="text-emerald-500" />
                         ) : (
                           <FaBuilding className="text-emerald-500" />
                         )}
-                        <span>{career.workType}</span>
+                        <span>{career.work_type}</span>
                       </div>
                     </div>
                   </div>
@@ -181,7 +176,7 @@ export default function About() {
                   
                   <div className="space-y-2">
                     <p className="text-zinc-400 text-lg">
-                      {edu.degree} • {edu.major}, {edu.degreeCode}
+                      {edu.degree} • {edu.major}{edu.degree_code ? `, ${edu.degree_code}` : ''}
                     </p>
                     
                     <div className="flex items-center gap-2 text-zinc-400">

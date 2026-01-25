@@ -1,67 +1,45 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaBriefcase, FaArrowRight } from "react-icons/fa";
-import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiNodedotjs, SiSupabase, SiPostgresql, SiFramer } from "react-icons/si";
-
-// Data Dummy Projects
-const projects = [
-  {
-    id: 1,
-    name: "satriabahari.my.id",
-    description: "Personal website & portfolio, built from scratch using Next.js, TypeScript, Tailwind CSS, and Framer Motion for smooth animations.",
-    technologies: [
-      { name: "TypeScript", icon: SiTypescript, color: "text-blue-500" },
-      { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-400" },
-      { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
-      { name: "Framer", icon: SiFramer, color: "text-white" },
-      { name: "Supabase", icon: SiSupabase, color: "text-emerald-400" },
-      { name: "PostgreSQL", icon: SiPostgresql, color: "text-blue-300" },
-    ],
-    featured: true,
-    imageType: "desktop", // desktop, mobile, multiple
-    slug: "satriabahari-my-id",
-  },
-  {
-    id: 2,
-    name: "Berbagi.link",
-    description: "Berbagi.link is a mini-website platform for online businesses but lacks mobile functionality. This project adds a complete mobile app experience.",
-    technologies: [
-      { name: "React", icon: SiReact, color: "text-blue-400" },
-      { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
-      { name: "TypeScript", icon: SiTypescript, color: "text-blue-500" },
-    ],
-    featured: true,
-    imageType: "multiple", // 3 mobile mockups
-    slug: "berbagi-link",
-  },
-  {
-    id: 3,
-    name: "Presensi Internal System",
-    description: "Internal attendance system for employees with real-time tracking and reporting features.",
-    technologies: [
-      { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
-      { name: "TypeScript", icon: SiTypescript, color: "text-blue-500" },
-      { name: "Node.js", icon: SiNodedotjs, color: "text-green-500" },
-    ],
-    featured: false,
-    imageType: "mobile",
-    slug: "presensi-internal-system",
-  },
-  {
-    id: 4,
-    name: "ROBUST",
-    description: "A comprehensive platform with membership, merchandise, job listings, and more.",
-    technologies: [
-      { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
-      { name: "TypeScript", icon: SiTypescript, color: "text-blue-500" },
-      { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-400" },
-    ],
-    featured: false,
-    imageType: "desktop",
-    slug: "robust",
-  },
-];
+import * as Icons from "react-icons/si";
+import { Project, TechStack } from "@/lib/supabase";
 
 export default function Projects() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch('/api/projects');
+      const data = await res.json();
+      setProjects(data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch projects:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Helper function untuk render icon
+  const renderIcon = (iconName: string, color: string) => {
+    const IconComponent = (Icons as any)[iconName];
+    if (!IconComponent) return null;
+    return <IconComponent className={`text-lg ${color}`} />;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen py-20 max-w-7xl mx-auto px-4">
+        <div className="text-white text-center">Loading...</div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen py-20 max-w-7xl mx-auto px-4">
       
@@ -86,7 +64,13 @@ export default function Projects() {
           >
             {/* Project Image/Mockup */}
             <div className="relative bg-zinc-950 h-64 overflow-hidden">
-              {project.imageType === "desktop" && (
+              {project.image_url ? (
+                <img
+                  src={project.image_url}
+                  alt={project.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : project.image_type === "desktop" ? (
                 <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-950 flex items-center justify-center">
                   <div className="w-full max-w-4xl mx-auto p-4">
                     <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-4">
@@ -101,9 +85,7 @@ export default function Projects() {
                     </div>
                   </div>
                 </div>
-              )}
-
-              {project.imageType === "mobile" && (
+              ) : project.image_type === "mobile" ? (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950">
                   <div className="w-48 h-80 bg-zinc-800 rounded-[2rem] border-8 border-zinc-900 p-2 shadow-2xl">
                     <div className="w-full h-full bg-zinc-900 rounded-2xl flex items-center justify-center">
@@ -111,9 +93,7 @@ export default function Projects() {
                     </div>
                   </div>
                 </div>
-              )}
-
-              {project.imageType === "multiple" && (
+              ) : project.image_type === "multiple" ? (
                 <div className="w-full h-full flex items-center justify-center gap-3 bg-gradient-to-br from-zinc-900 to-zinc-950 p-6">
                   {[1, 2, 3].map((i) => (
                     <div
@@ -139,7 +119,7 @@ export default function Projects() {
                     </div>
                   ))}
                 </div>
-              )}
+              ) : null}
 
               {/* Featured Badge */}
               {project.featured && (
@@ -160,12 +140,12 @@ export default function Projects() {
 
               {/* Technologies */}
               <div className="flex flex-wrap gap-3 mb-6">
-                {project.technologies.map((tech, index) => (
+                {project.tech_stacks?.map((tech) => (
                   <div
-                    key={index}
+                    key={tech.id}
                     className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800/50 border border-zinc-700 rounded-lg"
                   >
-                    <tech.icon className={`text-lg ${tech.color}`} />
+                    {renderIcon(tech.icon_name, tech.color)}
                     <span className="text-xs text-zinc-400">{tech.name}</span>
                   </div>
                 ))}

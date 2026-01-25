@@ -7,8 +7,8 @@ import { FaLaptopCode, FaUser, FaTools, FaTrophy, FaComments, FaLayerGroup, FaFi
 // HAPUS SiVuechain & SiLaravel yang bikin error
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiFramer, SiNodedotjs, SiSupabase, SiPostgresql, SiGit, SiDocker, SiFigma } from "react-icons/si";
 
-// --- 1. DATA GAMBAR UNTUK ABOUT ME (STACK) ---
-const stackImages = [
+// Default images fallback
+const defaultStackImages = [
   "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format", 
   "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=500&auto=format", 
   "https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=500&auto=format", 
@@ -36,6 +36,23 @@ const bottomSkills = [
 // KOMPONEN UTAMA: BENTO GRID
 // ============================================================================
 const BentoGrid = () => {
+  const [stackImages, setStackImages] = useState<string[]>(defaultStackImages);
+
+  // Fetch images from API
+  useEffect(() => {
+    fetch('/api/bento-grid?type=about_me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data && data.data.length > 0) {
+          const imageUrls = data.data.map((img: any) => img.image_url);
+          setStackImages(imageUrls);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to fetch about me images:', error);
+      });
+  }, []);
+
   // Menambahkan style untuk menyembunyikan scrollbar pada marquee
   useEffect(() => {
     const style = document.createElement('style');
