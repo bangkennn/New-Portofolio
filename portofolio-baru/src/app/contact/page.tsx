@@ -82,10 +82,19 @@ export default function Contact() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {contactLinks.map((card) => (
+            {contactLinks.map((card) => {
+              // Pastikan bg_color diterapkan dengan benar
+              const bgColorClass = card.bg_color || 'bg-zinc-900/50';
+              const gradientClass = card.gradient || 'from-zinc-800 to-zinc-900';
+              
+              return (
               <div
                 key={card.id}
-                className={`relative group bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 ${card.bg_color} min-h-[200px]`}
+                className={[
+                  'relative group border border-zinc-800 rounded-2xl p-6 overflow-hidden',
+                  'hover:border-emerald-500/50 transition-all duration-300 min-h-[200px]',
+                  bgColorClass
+                ].join(' ')}
               >
                 {/* Content */}
                 <div className="relative z-10 h-full flex flex-col">
@@ -111,19 +120,19 @@ export default function Contact() {
 
                 {/* Background gradient orb effect */}
                 <div className="absolute -bottom-8 -right-8 w-40 h-40 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
-                  <div className={`w-full h-full ${card.gradient} rounded-full blur-3xl animate-pulse`}></div>
+                  <div className={`w-full h-full bg-gradient-to-br ${gradientClass} rounded-full blur-3xl animate-pulse`}></div>
                 </div>
                 
                 {/* Icon dengan floating animation dan neon glow */}
                 <div className="absolute bottom-4 right-4 group-hover:bottom-6 group-hover:right-6 transition-all duration-300">
                   <div className="relative">
                     {/* Outer glow rings */}
-                    <div className={`absolute inset-0 ${card.gradient} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 animate-pulse`} style={{ transform: 'scale(1.5)' }}></div>
-                    <div className={`absolute inset-0 ${card.gradient} rounded-xl blur-md opacity-40 group-hover:opacity-60`} style={{ transform: 'scale(1.2)' }}></div>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 animate-pulse`} style={{ transform: 'scale(1.5)' }}></div>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} rounded-xl blur-md opacity-40 group-hover:opacity-60`} style={{ transform: 'scale(1.2)' }}></div>
                     
                     {/* Main icon container dengan gradient border */}
                     <div className="relative w-14 h-14 group-hover:w-16 group-hover:h-16 transition-all duration-300">
-                      <div className={`absolute inset-0 ${card.gradient} rounded-xl p-[2px]`}>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} rounded-xl p-[2px]`}>
                         <div className="w-full h-full bg-zinc-900/80 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/10">
                           <div className="text-2xl text-white group-hover:text-3xl transition-all duration-300 drop-shadow-2xl">
                             {renderIcon(card.icon_name, card.icon_type)}
@@ -134,7 +143,8 @@ export default function Contact() {
                   </div>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         )}
       </div>

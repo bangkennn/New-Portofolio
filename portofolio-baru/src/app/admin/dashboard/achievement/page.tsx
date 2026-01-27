@@ -22,7 +22,7 @@ export default function AchievementManagement() {
     category: "Course",
     credential_url: "",
     certificate_url: "",
-    certificate_type: "image" as "image" | "pdf",
+      certificate_type: "image" as "image",
     tags: [] as string[],
     order: 0,
   });
@@ -65,7 +65,7 @@ export default function AchievementManagement() {
       category: "Course",
       credential_url: "",
       certificate_url: "",
-      certificate_type: "image",
+      certificate_type: "image" as "image",
       tags: [],
       order: achievements.length,
     });
@@ -134,28 +134,39 @@ export default function AchievementManagement() {
   };
 
   const handleFileUpload = async (file: File) => {
+    // Validasi: hanya terima image (PNG/JPEG)
+    if (!file.type.startsWith('image/')) {
+      alert('File harus berupa gambar (PNG atau JPEG)');
+      return;
+    }
+
     setIsUploading(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
 
+      // Gunakan API upload standar untuk image
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
 
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Gagal mengupload file');
+      }
+
       const data = await res.json();
       if (data.url) {
-        // Deteksi tipe file
-        const fileType = file.type === 'application/pdf' ? 'pdf' : 'image';
         setAchievementForm((prev) => ({
           ...prev,
           certificate_url: data.url,
-          certificate_type: fileType,
+          certificate_type: 'image',
         }));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to upload file:', error);
+      alert('Error: ' + (error.message || 'Gagal mengupload file. Pastikan file adalah PNG atau JPEG yang valid.'));
     } finally {
       setIsUploading(false);
     }
@@ -175,8 +186,10 @@ export default function AchievementManagement() {
     setIsDragging(false);
 
     const file = e.dataTransfer.files[0];
-    if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
+    if (file && file.type.startsWith('image/')) {
       handleFileUpload(file);
+    } else {
+      alert('File harus berupa gambar (PNG atau JPEG)');
     }
   };
 
@@ -336,31 +349,18 @@ export default function AchievementManagement() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-zinc-400 mb-2">Kategori</label>
-                    <select
-                      value={achievementForm.category}
-                      onChange={(e) => setAchievementForm({ ...achievementForm, category: e.target.value })}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
-                    >
-                      <option value="Course">Course</option>
-                      <option value="Competition">Competition</option>
-                      <option value="Program">Program</option>
-                      <option value="Certification">Certification</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-zinc-400 mb-2">Tipe Sertifikat</label>
-                    <select
-                      value={achievementForm.certificate_type}
-                      onChange={(e) => setAchievementForm({ ...achievementForm, certificate_type: e.target.value as any })}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
-                    >
-                      <option value="image">Image (PNG/JPG)</option>
-                      <option value="pdf">PDF</option>
-                    </select>
-                  </div>
+                <div>
+                  <label className="block text-zinc-400 mb-2">Kategori</label>
+                  <select
+                    value={achievementForm.category}
+                    onChange={(e) => setAchievementForm({ ...achievementForm, category: e.target.value })}
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
+                  >
+                    <option value="Course">Course</option>
+                    <option value="Competition">Competition</option>
+                    <option value="Program">Program</option>
+                    <option value="Certification">Certification</option>
+                  </select>
                 </div>
 
                 <div>
@@ -376,7 +376,7 @@ export default function AchievementManagement() {
 
                 {/* Certificate Upload */}
                 <div>
-                  <label className="block text-zinc-400 mb-2">Sertifikat (PDF atau PNG)</label>
+                  <label className="block text-zinc-400 mb-2">Sertifikat (PNG atau JPEG)</label>
                   <div
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -389,17 +389,11 @@ export default function AchievementManagement() {
                   >
                     {achievementForm.certificate_url ? (
                       <div className="space-y-4">
-                        {achievementForm.certificate_type === 'pdf' ? (
-                          <div className="bg-zinc-800 rounded-lg p-4">
-                            <p className="text-zinc-400">PDF: {achievementForm.certificate_url}</p>
-                          </div>
-                        ) : (
-                          <img
-                            src={achievementForm.certificate_url}
-                            alt="Preview"
-                            className="max-h-48 mx-auto rounded-lg"
-                          />
-                        )}
+                        <img
+                          src={achievementForm.certificate_url}
+                          alt="Preview"
+                          className="max-h-48 mx-auto rounded-lg"
+                        />
                         <button
                           onClick={() => setAchievementForm({ ...achievementForm, certificate_url: "" })}
                           className="text-red-400 hover:text-red-300 text-sm"
@@ -411,11 +405,11 @@ export default function AchievementManagement() {
                       <div>
                         <FaUpload className="text-4xl text-zinc-600 mx-auto mb-4" />
                         <p className="text-zinc-400 mb-2">
-                          Drag & drop sertifikat (PDF atau PNG) di sini atau klik untuk upload
+                          Drag & drop gambar sertifikat (PNG atau JPEG) di sini atau klik untuk upload
                         </p>
                         <input
                           type="file"
-                          accept="image/*,.pdf"
+                          accept="image/png,image/jpeg,image/jpg"
                           onChange={handleFileInput}
                           className="hidden"
                           id="certificate-upload"
@@ -436,7 +430,7 @@ export default function AchievementManagement() {
                     type="text"
                     value={achievementForm.certificate_url}
                     onChange={(e) => setAchievementForm({ ...achievementForm, certificate_url: e.target.value })}
-                    placeholder="Atau masukkan URL sertifikat"
+                    placeholder="Atau masukkan URL gambar sertifikat"
                     className="w-full mt-2 bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>

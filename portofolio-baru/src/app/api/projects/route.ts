@@ -55,7 +55,7 @@ export async function GET() {
 // POST - Tambah project baru
 export async function POST(request: Request) {
   try {
-    const { name, description, slug, featured, image_type, image_url, order, tech_stack_ids } = await request.json();
+    const { name, description, slug, featured, image_type, image_url, project_url, order, tech_stack_ids } = await request.json();
 
     if (!name || !description || !slug) {
       return NextResponse.json(
@@ -74,6 +74,7 @@ export async function POST(request: Request) {
         featured: featured || false,
         image_type: image_type || 'desktop',
         image_url: image_url || null,
+        project_url: project_url || null,
         order: order || 0,
       })
       .select()
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
 // PUT - Update project
 export async function PUT(request: Request) {
   try {
-    const { id, name, description, slug, featured, image_type, image_url, order, tech_stack_ids } = await request.json();
+    const { id, name, description, slug, featured, image_type, image_url, project_url, order, tech_stack_ids } = await request.json();
 
     if (!id) {
       return NextResponse.json(
@@ -145,6 +146,7 @@ export async function PUT(request: Request) {
     if (featured !== undefined) updateData.featured = featured;
     if (image_type !== undefined) updateData.image_type = image_type;
     if (image_url !== undefined) updateData.image_url = image_url;
+    if (project_url !== undefined) updateData.project_url = project_url;
     if (order !== undefined) updateData.order = order;
 
     const { data: project, error: projectError } = await supabase

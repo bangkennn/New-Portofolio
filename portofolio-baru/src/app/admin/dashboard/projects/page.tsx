@@ -24,6 +24,7 @@ export default function ProjectsManagement() {
     featured: false,
     image_type: "desktop" as "desktop" | "mobile" | "multiple",
     image_url: "",
+    project_url: "",
     order: 0,
     tech_stack_ids: [] as number[],
   });
@@ -76,6 +77,7 @@ export default function ProjectsManagement() {
       featured: false,
       image_type: "desktop",
       image_url: "",
+      project_url: "",
       order: projects.length,
       tech_stack_ids: [],
     });
@@ -91,6 +93,7 @@ export default function ProjectsManagement() {
       featured: project.featured,
       image_type: project.image_type,
       image_url: project.image_url || "",
+      project_url: project.project_url || "",
       order: project.order,
       tech_stack_ids: project.tech_stacks?.map((ts) => ts.id) || [],
     });
@@ -431,6 +434,21 @@ export default function ProjectsManagement() {
                     placeholder="Atau masukkan URL gambar"
                     className="w-full mt-2 bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
                   />
+                </div>
+
+                {/* Project URL */}
+                <div>
+                  <label className="block text-zinc-400 mb-2">Link Project (URL)</label>
+                  <input
+                    type="url"
+                    value={projectForm.project_url}
+                    onChange={(e) => setProjectForm({ ...projectForm, project_url: e.target.value })}
+                    placeholder="https://example.com atau https://github.com/username/repo"
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
+                  />
+                  <p className="text-zinc-500 text-xs mt-1">
+                    Link yang akan dibuka saat tombol "Lihat Proyek" diklik. Kosongkan jika ingin menggunakan halaman detail project.
+                  </p>
                 </div>
 
                 {/* Tech Stacks Selection */}

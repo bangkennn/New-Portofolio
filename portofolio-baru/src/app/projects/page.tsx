@@ -152,13 +152,25 @@ export default function Projects() {
               </div>
 
               {/* View Project Button */}
-              <Link
-                href={`/projects/${project.slug}`}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 rounded-full hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 group/btn"
-              >
-                <span className="text-sm font-medium">Lihat Proyek</span>
-                <FaArrowRight className="text-xs group-hover/btn:translate-x-1 transition-transform" />
-              </Link>
+              {project.project_url ? (
+                <a
+                  href={project.project_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 rounded-full hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 group/btn"
+                >
+                  <span className="text-sm font-medium">Lihat Proyek</span>
+                  <FaArrowRight className="text-xs group-hover/btn:translate-x-1 transition-transform" />
+                </a>
+              ) : (
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 rounded-full hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 group/btn"
+                >
+                  <span className="text-sm font-medium">Lihat Proyek</span>
+                  <FaArrowRight className="text-xs group-hover/btn:translate-x-1 transition-transform" />
+                </Link>
+              )}
             </div>
           </div>
         ))}

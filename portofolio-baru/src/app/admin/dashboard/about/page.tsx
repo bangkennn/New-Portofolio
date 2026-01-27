@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FaUser, FaSave, FaPlus, FaTrash, FaEdit, FaChevronRight, FaArrowLeft, FaBriefcase, FaGraduationCap } from "react-icons/fa";
+import { FaUser, FaSave, FaPlus, FaTrash, FaEdit, FaChevronRight, FaArrowLeft, FaBriefcase, FaGraduationCap, FaUpload } from "react-icons/fa";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { Career, Education } from "@/lib/supabase";
@@ -36,6 +36,7 @@ export default function AboutManagement() {
     type: "Internship",
     work_type: "Remote",
     logo: "🟢",
+    logo_url: "",
     responsibilities: "",
     order: 0,
   });
@@ -53,6 +54,7 @@ export default function AboutManagement() {
     duration: "",
     location: "",
     logo: "🎓",
+    logo_url: "",
     order: 0,
   });
 
@@ -142,6 +144,7 @@ export default function AboutManagement() {
       type: "Internship",
       work_type: "Remote",
       logo: "🟢",
+      logo_url: "",
       responsibilities: "",
       order: careers.length,
     });
@@ -161,6 +164,7 @@ export default function AboutManagement() {
       type: career.type,
       work_type: career.work_type,
       logo: career.logo,
+      logo_url: career.logo_url || "",
       responsibilities: career.responsibilities || "",
       order: career.order,
     });
@@ -225,6 +229,7 @@ export default function AboutManagement() {
       duration: "",
       location: "",
       logo: "🎓",
+      logo_url: "",
       order: educations.length,
     });
     setShowEducationForm(true);
@@ -242,6 +247,7 @@ export default function AboutManagement() {
       duration: education.duration,
       location: education.location,
       logo: education.logo,
+      logo_url: education.logo_url || "",
       order: education.order,
     });
     setShowEducationForm(true);
@@ -289,6 +295,29 @@ export default function AboutManagement() {
       }
     } catch (error) {
       console.error('Failed to delete education:', error);
+    }
+  };
+
+  const handleLogoUpload = async (file: File, type: 'career' | 'education') => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        if (type === 'career') {
+          setCareerForm({ ...careerForm, logo_url: data.url });
+        } else {
+          setEducationForm({ ...educationForm, logo_url: data.url });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to upload logo:', error);
     }
   };
 
@@ -559,14 +588,75 @@ export default function AboutManagement() {
                 </div>
 
                 <div>
-                  <label className="block text-zinc-400 mb-2">Logo (Emoji)</label>
-                  <input
-                    type="text"
-                    value={careerForm.logo}
-                    onChange={(e) => setCareerForm({ ...careerForm, logo: e.target.value })}
-                    placeholder="🟢"
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
-                  />
+                  <label className="block text-zinc-400 mb-2">Logo</label>
+                  <div className="space-y-3">
+                    {/* Logo URL Upload */}
+                    <div
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                          handleLogoUpload(file, 'career');
+                        }
+                      }}
+                      onDragOver={(e) => e.preventDefault()}
+                      className="border-2 border-dashed border-zinc-700 rounded-xl p-4 text-center cursor-pointer hover:border-emerald-500/50 transition-colors"
+                      onClick={() => document.getElementById('career-logo-upload')?.click()}
+                    >
+                      {careerForm.logo_url ? (
+                        <div className="space-y-2">
+                          <img
+                            src={careerForm.logo_url}
+                            alt="Logo"
+                            className="w-16 h-16 mx-auto rounded-lg object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCareerForm({ ...careerForm, logo_url: "" });
+                            }}
+                            className="text-red-400 text-sm hover:text-red-300"
+                          >
+                            Hapus Logo
+                          </button>
+                        </div>
+                      ) : (
+                        <div>
+                          <FaUpload className="text-2xl text-zinc-600 mx-auto mb-2" />
+                          <p className="text-zinc-400 text-sm">Klik atau drag & drop untuk upload logo</p>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        id="career-logo-upload"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleLogoUpload(file, 'career');
+                          }
+                        }}
+                      />
+                    </div>
+                    {/* Logo URL Input */}
+                    <input
+                      type="text"
+                      value={careerForm.logo_url}
+                      onChange={(e) => setCareerForm({ ...careerForm, logo_url: e.target.value })}
+                      placeholder="Atau masukkan URL logo"
+                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
+                    />
+                    {/* Logo Emoji Fallback */}
+                    <input
+                      type="text"
+                      value={careerForm.logo}
+                      onChange={(e) => setCareerForm({ ...careerForm, logo: e.target.value })}
+                      placeholder="Logo Emoji (fallback jika tidak ada gambar)"
+                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -683,14 +773,75 @@ export default function AboutManagement() {
                 </div>
 
                 <div>
-                  <label className="block text-zinc-400 mb-2">Logo (Emoji)</label>
-                  <input
-                    type="text"
-                    value={educationForm.logo}
-                    onChange={(e) => setEducationForm({ ...educationForm, logo: e.target.value })}
-                    placeholder="🎓"
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
-                  />
+                  <label className="block text-zinc-400 mb-2">Logo</label>
+                  <div className="space-y-3">
+                    {/* Logo URL Upload */}
+                    <div
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                          handleLogoUpload(file, 'education');
+                        }
+                      }}
+                      onDragOver={(e) => e.preventDefault()}
+                      className="border-2 border-dashed border-zinc-700 rounded-xl p-4 text-center cursor-pointer hover:border-emerald-500/50 transition-colors"
+                      onClick={() => document.getElementById('education-logo-upload')?.click()}
+                    >
+                      {educationForm.logo_url ? (
+                        <div className="space-y-2">
+                          <img
+                            src={educationForm.logo_url}
+                            alt="Logo"
+                            className="w-16 h-16 mx-auto rounded-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEducationForm({ ...educationForm, logo_url: "" });
+                            }}
+                            className="text-red-400 text-sm hover:text-red-300"
+                          >
+                            Hapus Logo
+                          </button>
+                        </div>
+                      ) : (
+                        <div>
+                          <FaUpload className="text-2xl text-zinc-600 mx-auto mb-2" />
+                          <p className="text-zinc-400 text-sm">Klik atau drag & drop untuk upload logo</p>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        id="education-logo-upload"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleLogoUpload(file, 'education');
+                          }
+                        }}
+                      />
+                    </div>
+                    {/* Logo URL Input */}
+                    <input
+                      type="text"
+                      value={educationForm.logo_url}
+                      onChange={(e) => setEducationForm({ ...educationForm, logo_url: e.target.value })}
+                      placeholder="Atau masukkan URL logo"
+                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
+                    />
+                    {/* Logo Emoji Fallback */}
+                    <input
+                      type="text"
+                      value={educationForm.logo}
+                      onChange={(e) => setEducationForm({ ...educationForm, logo: e.target.value })}
+                      placeholder="Logo Emoji (fallback jika tidak ada gambar)"
+                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
                 </div>
               </div>
 

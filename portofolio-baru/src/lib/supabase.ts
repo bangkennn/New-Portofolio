@@ -44,6 +44,7 @@ export interface Career {
   type: string;
   work_type: string;
   logo: string;
+  logo_url: string | null;
   responsibilities: string | null;
   order: number;
   created_at: string;
@@ -61,6 +62,7 @@ export interface Education {
   duration: string;
   location: string;
   logo: string;
+  logo_url: string | null;
   order: number;
   created_at: string;
   updated_at: string;
@@ -83,6 +85,7 @@ export interface Project {
   featured: boolean;
   image_type: 'desktop' | 'mobile' | 'multiple';
   image_url: string | null;
+  project_url: string | null;
   order: number;
   created_at: string;
   updated_at: string;

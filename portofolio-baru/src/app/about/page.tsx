@@ -90,8 +90,16 @@ export default function About() {
               <div className="flex flex-col md:flex-row gap-6">
                 {/* Logo/Icon */}
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-2xl">
-                    {career.logo}
+                  <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden">
+                    {career.logo_url ? (
+                      <img
+                        src={career.logo_url}
+                        alt={career.company}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl">{career.logo}</span>
+                    )}
                   </div>
                 </div>
 
@@ -163,8 +171,16 @@ export default function About() {
               <div className="flex flex-col md:flex-row gap-6">
                 {/* Logo/Icon */}
                 <div className="flex-shrink-0">
-                  <div className="w-20 h-20 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-3xl">
-                    {edu.logo}
+                  <div className="w-20 h-20 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden">
+                    {edu.logo_url ? (
+                      <img
+                        src={edu.logo_url}
+                        alt={edu.institution}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-3xl">{edu.logo}</span>
+                    )}
                   </div>
                 </div>
 

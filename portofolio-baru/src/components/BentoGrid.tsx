@@ -37,9 +37,11 @@ const bottomSkills = [
 // ============================================================================
 const BentoGrid = () => {
   const [stackImages, setStackImages] = useState<string[]>(defaultStackImages);
+  const [projectImages, setProjectImages] = useState<string[]>([]);
 
   // Fetch images from API
   useEffect(() => {
+    // Fetch About Me images
     fetch('/api/bento-grid?type=about_me')
       .then((res) => res.json())
       .then((data) => {
@@ -50,6 +52,19 @@ const BentoGrid = () => {
       })
       .catch((error) => {
         console.error('Failed to fetch about me images:', error);
+      });
+
+    // Fetch Project images
+    fetch('/api/bento-grid?type=project')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data && data.data.length > 0) {
+          const imageUrls = data.data.map((img: any) => img.image_url);
+          setProjectImages(imageUrls);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to fetch project images:', error);
       });
   }, []);
 
@@ -125,12 +140,33 @@ const BentoGrid = () => {
               <p className="text-zinc-400 mt-2 max-w-[250px]">A selection of real apps built to solve real problems.</p>
             </div>
 
-            {/* MOCKUP 3 LAYER - Smaller and positioned better */}
-            <div className="absolute right-[-30px] bottom-[-50px] flex flex-col gap-3 rotate-[-12deg] group-hover:rotate-[-5deg] group-hover:scale-105 transition-all duration-500 ease-out opacity-70 group-hover:opacity-100 z-10">
-               <div className="w-56 h-28 bg-zinc-800 border border-zinc-700/50 rounded-lg shadow-2xl translate-x-10 opacity-60"></div>
-               <div className="w-56 h-28 bg-zinc-900 border border-zinc-700/50 rounded-lg shadow-2xl translate-x-5 opacity-80"></div>
-               <div className="w-56 h-28 bg-zinc-950 border border-emerald-500/20 rounded-lg shadow-2xl"></div>
-            </div>
+            {/* Display Project Images or Mockup */}
+            {projectImages.length > 0 ? (
+              <div className="absolute right-[-30px] bottom-[-50px] flex flex-col gap-3 rotate-[-12deg] group-hover:rotate-[-5deg] group-hover:scale-105 transition-all duration-500 ease-out opacity-70 group-hover:opacity-100 z-10">
+                {projectImages.slice(0, 3).map((imgUrl, index) => (
+                  <div
+                    key={index}
+                    className={`w-56 h-28 rounded-lg shadow-2xl overflow-hidden border ${
+                      index === 0 ? 'translate-x-10 opacity-60 border-zinc-700/50' :
+                      index === 1 ? 'translate-x-5 opacity-80 border-zinc-700/50' :
+                      'border-emerald-500/20'
+                    }`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`Project ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="absolute right-[-30px] bottom-[-50px] flex flex-col gap-3 rotate-[-12deg] group-hover:rotate-[-5deg] group-hover:scale-105 transition-all duration-500 ease-out opacity-70 group-hover:opacity-100 z-10">
+                <div className="w-56 h-28 bg-zinc-800 border border-zinc-700/50 rounded-lg shadow-2xl translate-x-10 opacity-60"></div>
+                <div className="w-56 h-28 bg-zinc-900 border border-zinc-700/50 rounded-lg shadow-2xl translate-x-5 opacity-80"></div>
+                <div className="w-56 h-28 bg-zinc-950 border border-emerald-500/20 rounded-lg shadow-2xl"></div>
+              </div>
+            )}
           </div>
         </SpotlightCard>
 

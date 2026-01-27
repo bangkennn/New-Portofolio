@@ -23,7 +23,7 @@ export async function GET() {
 // POST - Tambah career baru
 export async function POST(request: Request) {
   try {
-    const { title, company, location, start_date, end_date, duration, months, type, work_type, logo, responsibilities, order } = await request.json();
+    const { title, company, location, start_date, end_date, duration, months, type, work_type, logo, logo_url, responsibilities, order } = await request.json();
 
     if (!title || !company || !location || !start_date || !duration || !months || !type || !work_type) {
       return NextResponse.json(
@@ -45,6 +45,7 @@ export async function POST(request: Request) {
         type,
         work_type,
         logo: logo || '🟢',
+        logo_url: logo_url || null,
         responsibilities: responsibilities || null,
         order: order || 0,
       })
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
 // PUT - Update career
 export async function PUT(request: Request) {
   try {
-    const { id, title, company, location, start_date, end_date, duration, months, type, work_type, logo, responsibilities, order } = await request.json();
+    const { id, title, company, location, start_date, end_date, duration, months, type, work_type, logo, logo_url, responsibilities, order } = await request.json();
 
     if (!id) {
       return NextResponse.json(
@@ -88,6 +89,7 @@ export async function PUT(request: Request) {
     if (type !== undefined) updateData.type = type;
     if (work_type !== undefined) updateData.work_type = work_type;
     if (logo !== undefined) updateData.logo = logo;
+    if (logo_url !== undefined) updateData.logo_url = logo_url;
     if (responsibilities !== undefined) updateData.responsibilities = responsibilities;
     if (order !== undefined) updateData.order = order;
 

@@ -23,7 +23,7 @@ export async function GET() {
 // POST - Tambah education baru
 export async function POST(request: Request) {
   try {
-    const { institution, degree, major, degree_code, start_year, end_year, duration, location, logo, order } = await request.json();
+    const { institution, degree, major, degree_code, start_year, end_year, duration, location, logo, logo_url, order } = await request.json();
 
     if (!institution || !degree || !major || !start_year || !duration || !location) {
       return NextResponse.json(
@@ -44,6 +44,7 @@ export async function POST(request: Request) {
         duration,
         location,
         logo: logo || '🎓',
+        logo_url: logo_url || null,
         order: order || 0,
       })
       .select()
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
 // PUT - Update education
 export async function PUT(request: Request) {
   try {
-    const { id, institution, degree, major, degree_code, start_year, end_year, duration, location, logo, order } = await request.json();
+    const { id, institution, degree, major, degree_code, start_year, end_year, duration, location, logo, logo_url, order } = await request.json();
 
     if (!id) {
       return NextResponse.json(
@@ -85,6 +86,7 @@ export async function PUT(request: Request) {
     if (duration !== undefined) updateData.duration = duration;
     if (location !== undefined) updateData.location = location;
     if (logo !== undefined) updateData.logo = logo;
+    if (logo_url !== undefined) updateData.logo_url = logo_url;
     if (order !== undefined) updateData.order = order;
 
     const { data, error } = await supabase
