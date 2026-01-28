@@ -115,8 +115,8 @@ export interface ContactLink {
   url: string;
   icon_name: string;
   icon_type: 'fa' | 'si';
-  gradient: string;
-  bg_color: string;
+  gradient?: string; // Optional - warna ditentukan di frontend berdasarkan URL
+  bg_color?: string; // Optional - warna ditentukan di frontend berdasarkan URL
   order: number;
   created_at: string;
   updated_at: string;

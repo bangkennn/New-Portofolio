@@ -25,9 +25,10 @@ export async function POST(request: Request) {
   try {
     const { title, description, button_text, url, icon_name, icon_type, gradient, bg_color, order } = await request.json();
 
-    if (!title || !description || !button_text || !url || !icon_name || !icon_type || !gradient || !bg_color) {
+    // Hanya field penting yang required, gradient dan bg_color optional
+    if (!title || !description || !button_text || !url || !icon_name || !icon_type) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Title, description, button_text, url, icon_name, and icon_type are required' },
         { status: 400 }
       );
     }
@@ -41,8 +42,8 @@ export async function POST(request: Request) {
         url,
         icon_name,
         icon_type,
-        gradient,
-        bg_color,
+        gradient: gradient || null,
+        bg_color: bg_color || null,
         order: order || 0,
       })
       .select()

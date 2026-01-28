@@ -22,8 +22,6 @@ export default function ContactManagement() {
     url: "",
     icon_name: "FaGithub",
     icon_type: "fa" as "fa" | "si",
-    gradient: "from-zinc-800 to-zinc-900",
-    bg_color: "bg-zinc-900/50",
     order: 0,
   });
 
@@ -62,8 +60,6 @@ export default function ContactManagement() {
       url: "",
       icon_name: "FaGithub",
       icon_type: "fa",
-      gradient: "from-zinc-800 to-zinc-900",
-      bg_color: "bg-zinc-900/50",
       order: contactLinks.length,
     });
     setShowForm(true);
@@ -78,8 +74,6 @@ export default function ContactManagement() {
       url: link.url,
       icon_name: link.icon_name,
       icon_type: link.icon_type,
-      gradient: link.gradient,
-      bg_color: link.bg_color,
       order: link.order,
     });
     setShowForm(true);
@@ -282,26 +276,10 @@ export default function ContactManagement() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-zinc-400 mb-2">Gradient</label>
-                  <input
-                    type="text"
-                    value={formData.gradient}
-                    onChange={(e) => setFormData({ ...formData, gradient: e.target.value })}
-                    placeholder="from-red-500 to-red-600"
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-zinc-400 mb-2">Background Color</label>
-                  <input
-                    type="text"
-                    value={formData.bg_color}
-                    onChange={(e) => setFormData({ ...formData, bg_color: e.target.value })}
-                    placeholder="bg-gradient-to-br from-red-500/20 to-red-600/20"
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500"
-                  />
+                <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-4">
+                  <p className="text-emerald-400 text-sm">
+                    💡 <strong>Info:</strong> Warna gradient akan ditentukan otomatis berdasarkan URL platform (Instagram, LinkedIn, Gmail, TikTok, dll.). Anda hanya perlu mengisi URL yang benar.
+                  </p>
                 </div>
               </div>
 
